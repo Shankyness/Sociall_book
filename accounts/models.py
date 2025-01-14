@@ -1,23 +1,23 @@
-from django.contrib.auth.models import AbstractUser, User
+from django.contrib.auth.models import AbstractUser
 from django.db import models
+from django.conf import settings  # Import settings to use AUTH_USER_MODEL
 from datetime import date
-from django.conf import settings
-
-from django.db import models
 
 class CustomUser(AbstractUser):
     public_visibility = models.BooleanField(default=True)
-    age = models.PositiveIntegerField(null=True, blank=True)
+    age = models.IntegerField(null=True, blank=True)
     birth_year = models.PositiveIntegerField(null=True, blank=True)
-    address = models.TextField(null=True, blank=True)
+    address = models.TextField(max_length=255,null=True, blank=True)
 
-    def save(self, *args, **kwargs):
-        # Automatically calculate age from birth_year
+    @property
+    def age(self):
         if self.birth_year:
-            self.age = date.today().year - self.birth_year
-        super().save(*args, **kwargs)
-        
-        
+            return date.today().year - self.birth_year
+        return None
+
+    def __str__(self):
+        return self.username
+    
     
 class UploadedFile(models.Model):
     VISIBILITY_CHOICES = [
@@ -38,5 +38,13 @@ class UploadedFile(models.Model):
 
     def __str__(self):
         return self.title
- 
-    
+
+    def is_visible_to_user(self, user):
+        """
+        Check if a file is visible to the given user.
+        Public files are visible to everyone.
+        Private files are visible only to the owner.
+        """
+        if self.visibility == 'public' or self.user == user:
+            return True
+        return False

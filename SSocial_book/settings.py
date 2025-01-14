@@ -32,6 +32,14 @@ ALLOWED_HOSTS = []
 
 # Application definition
 
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_USE_TLS = True
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'Shashankkumar0107@gmail.com'  # Replace with sender's email address
+EMAIL_HOST_PASSWORD = 'vmdl ciyf kynf txil'  # Replace with your email password or app-specific password
+
+
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -40,7 +48,26 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'accounts', 
+    'rest_framework',
+    'rest_framework.authtoken',
+    'djoser',
+    'django_filters',
 ]
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.TokenAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+    ),
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticated',
+    ),
+}
+
+DJOSER = {
+    'LOGIN_FIELD': 'username',
+}
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -78,8 +105,12 @@ WSGI_APPLICATION = 'SSocial_book.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'social_book',  # Replace with your database name
+        'USER': 'myuser3',    # Replace with your database username
+        'PASSWORD': 'admin',  # Replace with your database password
+        'HOST': 'localhost',       # Or your database server address
+        'PORT': '5432',            # Default PostgreSQL port
     }
 }
 
@@ -134,3 +165,10 @@ STATICFILES_DIRS = [
 
 AUTH_USER_MODEL = 'accounts.CustomUser'
 
+LOGIN_URL = '/accounts/login/'  # Redirects users to the login page if not authenticated
+
+# Default URL after login (used if no 'next' parameter is provided)
+LOGIN_REDIRECT_URL = '/accounts/dashboard/'  # Change this to the desired default page after login
+
+# Optional: Logout redirect URL
+LOGOUT_REDIRECT_URL = '/'  # Redirects to the home page (or any page) after logout
