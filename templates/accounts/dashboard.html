@@ -47,6 +47,20 @@
         .logout-button:hover {
             text-decoration: underline;
         }
+
+        /* Center the buttons below the dashboard box */
+        .button-container {
+            display: flex;
+            justify-content: center;  /* Horizontally center the buttons */
+            gap: 20px;  /* Adds some space between the buttons */
+            margin-top: 30px;  /* Space between dashboard box and buttons */
+        }
+
+        .custom-btn {
+            width: auto;  /* Adjust button width based on content */
+            padding-left: 20px;
+            padding-right: 20px;
+        }
     </style>
 </head>
 <body class="dashboard-page">
@@ -88,6 +102,17 @@
             </div>
         </div>
     </div>
+
+    <!-- Button Container (Centered and with gap) -->
+    <!-- Button Container (Centered and with gap) -->
+<div class="button-container">
+    <!-- Link for Upload Books -->
+    <a href="{% url 'upload_books' %}" class="btn btn-primary btn-lg custom-btn">Upload Books</a>
+    
+    <!-- Link for My Books -->
+    <a href="{% url 'my_books' %}" class="btn btn-primary btn-lg custom-btn">My Books</a>
+</div>
+
 
     <!-- js -->
     <script src="{% static 'vendors/scripts/core.js' %}"></script>
